@@ -1,0 +1,11 @@
+<dev class="row">
+    <dev class="col-md-4">
+        <form action="{{action}}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-primary">{{ button }}</button>
+            <a class="btn btn-primary" href="https://t.me/authorization_teb_bot" role="button">Зареєструватись</a>
+        </form>
+    </dev>
+</dev>
