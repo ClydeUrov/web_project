@@ -2,7 +2,6 @@ import logging
 import os
 import re
 import aiohttp
-import requests
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
@@ -10,7 +9,6 @@ from aiogram.dispatcher.filters import Command, Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import ParseMode, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.utils import executor
-from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.INFO)
@@ -28,10 +26,8 @@ class Form(StatesGroup):
     password = State()
 
 
-
 @dp.message_handler(commands=["start"])
 async def send_on_site(message: types.Message, state: FSMContext):
-    # Отримуємо CSRF токен
     await message.answer("Вас вітає наша телеграм реєстрація!\nДля початку Введи своє ім'я")
     await Form.name.set()
 
@@ -81,18 +77,14 @@ async def cancel_registration(message: types.Message, state: FSMContext):
 async def send_on_site(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         print(data)
-    url = 'http://127.0.0.1:8000//servants/login'
+    data = {"message": message.text, "username": message.from_user.username, "user_id": message.from_user.id,
+            "first_name": message.from_user.first_name, "last_name": message.from_user.last_name,
+            "name": data['name'], 'email': data['email'], 'password': data['password']}
+
     async with aiohttp.ClientSession() as session:
-        async with session.get('http://127.0.0.1:8000') as response:
-            csrf_token = response.cookies['csrftoken']
-            print(csrf_token)
-            headers = {'X-CSRFToken': str(csrf_token)}
-            data = {"message": message.text, "username": message.from_user.username, "user_id": message.from_user.id,
-                    "first_name": message.from_user.first_name, "last_name": message.from_user.last_name,
-                    "name": data['name'], 'email': data['email'], 'password': data['password']}
-            async with session.post(url, data=data, headers=headers) as resp:
-                print(resp.status)
-                print(await resp.text())
+        async with session.post('http://127.0.0.1:8000/', data=data) as resp:
+            await message.answer(await resp.text())
+
     await state.finish()
 
 
