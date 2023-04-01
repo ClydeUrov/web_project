@@ -8,11 +8,11 @@ User = get_user_model()
 class UserLoginForm(forms.Form):
     username = forms.CharField(label="username", widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'placeholder': 'Введите username',
+        'placeholder': 'Введіть name',
     }))
     password = forms.CharField(label="password", widget=forms.PasswordInput(attrs={
         'class': 'form-control',
-        'placeholder': 'Введите password',
+        'placeholder': 'Введіть password',
     }))
 
     def clean(self, *args, **kwargs):
