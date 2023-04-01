@@ -103,6 +103,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
+CSRF_TRUSTED_ORIGINS = [
+    'https://798a-46-33-250-161.eu.ngrok.io',
+]
 
 LANGUAGE_CODE = "ru-ru"
 
