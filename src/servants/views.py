@@ -25,7 +25,7 @@ def register(request):
 
         return HttpResponse('User created successfully!')
     else:
-        return HttpResponse('It is not successfully')
+        return redirect('home')
 
 
 def login_view(request):

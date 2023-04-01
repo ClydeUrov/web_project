@@ -82,13 +82,13 @@ async def send_on_site(message: types.Message, state: FSMContext):
             "name": data['name'], 'email': data['email'], 'password': data['password']}
 
     async with aiohttp.ClientSession() as session:
-        async with session.post('http://127.0.0.1:8000/', data=data) as resp:
+        async with session.post('https://6d05-46-33-250-161.eu.ngrok.io/', data=data) as resp:
             await message.answer(await resp.text())
 
     await state.finish()
 
     keyboard = InlineKeyboardMarkup().add(
-        InlineKeyboardButton(text="Перейти на сайт", url="http://127.0.0.1:8000/servants/login/")
+        InlineKeyboardButton(text="Перейти на сайт", url="https://6d05-46-33-250-161.eu.ngrok.io/servants/login/")
     )
     await message.answer("Для переходу на сайт нажміть кнопку", reply_markup=keyboard)
 
