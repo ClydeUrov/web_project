@@ -7,7 +7,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Command, Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.types import ParseMode, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ParseMode, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
 from dotenv import load_dotenv
 
@@ -28,7 +28,7 @@ class Form(StatesGroup):
 
 @dp.message_handler(commands=["start"])
 async def send_on_site(message: types.Message, state: FSMContext):
-    await message.answer("Вас вітає наша телеграм реєстрація!\nДля початку Введи своє ім'я")
+    await message.answer("Вас вітає наша телеграм реєстрація!\nДля початку введи своє Ім'я")
     await Form.name.set()
 
 
@@ -86,6 +86,11 @@ async def send_on_site(message: types.Message, state: FSMContext):
             await message.answer(await resp.text())
 
     await state.finish()
+
+    keyboard = InlineKeyboardMarkup().add(
+        InlineKeyboardButton(text="Перейти на сайт", url="http://127.0.0.1:8000/servants/login/")
+    )
+    await message.answer("Для переходу на сайт нажміть кнопку", reply_markup=keyboard)
 
 
 if __name__ == "__main__":

@@ -23,5 +23,6 @@ from service.view import home
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("servants/", include(('servants.urls', 'servants'))),
-    path('', views.register, name='home'),
+    path('', views.register),
+    path('home/', home, name='home'),
 ]

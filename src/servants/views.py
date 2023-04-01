@@ -6,14 +6,12 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect, requires_csr
 
 from servants.forms import UserLoginForm
 
+User = get_user_model()
 
 @csrf_exempt
 def register(request):
-    print("POST:", request.POST)
-    print("BODY:", request.body)
     if request.method == 'POST':
-        print(2)
-        # получение данных из запроса POST
+
         response = request.POST
         email = response.get('email')
         password = response.get('password')
@@ -21,21 +19,16 @@ def register(request):
         last_name = response.get('last_name')
         username = response.get('name')
 
-        # создание нового объекта User
-        User = get_user_model()
         user = User.objects.create_user(
-            email=email, password=password, first_name=first_name, last_name=last_name, username=username)
-        print(user)
-        # другие действия, которые необходимо выполнить после создания пользователя
+            email=email, password=password, first_name=first_name, last_name=last_name, username=username
+        )
 
-        # возвращаем ответ
-        return HttpResponse('User created successfully')
+        return HttpResponse('User created successfully!')
     else:
         return HttpResponse('It is not successfully')
 
 
 def login_view(request):
-    print(111)
     form = UserLoginForm(request.POST or None)
     _next = request.GET.get('next')
     if form.is_valid():
@@ -44,13 +37,31 @@ def login_view(request):
         user = authenticate(username=username, password=password)
         login(request, user)
         _next = _next or "/"
-        return redirect(_next)
+        return redirect('servants:user')
     return render(request, 'servants/login.html', {'form': form})
 
 
 def logout_view(request):
     logout(request)
-    return redirect('/')
+    return redirect('servants:login')
+
+
+def user_view(request):
+    user_id = request.user.id
+    print(request)
+    user = User.objects.get(id=user_id)
+    first_name = user.first_name  # "Clyde"
+    last_name = user.last_name
+    print(first_name)
+    print(last_name)
+    context = {
+        'email': user.email,
+        'password': user.password,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'username': user.username,
+    }
+    return render(request, 'servants/user.html', context)
 
 
 

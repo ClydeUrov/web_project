@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Сторінка користувача{% endblock %}
+
+{% block content %}
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>First name:</td>
+      <td>{{ first_name }}</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Last name:</td>
+      <td>{{ last_name }}</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Username:</td>
+      <td>{{ username }}</td>
+    </tr>
+    <tr>
+      <th scope="row">4</th>
+      <td>Email:</td>
+      <td>{{ email }}</td>
+    </tr>
+  </tbody>
+</table>
+<!--    <h1>Сторінка користувача</h1>-->
+<!--    <p>Email: {{ email }}</p>-->
+<!--    <p>First name: {{ first_name }}</p>-->
+<!--    <p>Last name: {{ last_name }}</p>-->
+<!--    <p>Username: {{ username }}</p>-->
+{% endblock %}
