@@ -59,11 +59,14 @@ async def process_name(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Form.password)
 async def process_age(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        email = message.text.strip()
-        if not EMAIL_REGEX.match(email):
-            await message.answer("Ви ввели некоректний E-mail. Будь ласка, спробуйте ще раз.")
+        password = message.text.strip()
+        if not PASSWORD_REGEX.match(password):
+            await message.answer(
+                "Пароль повинен містити як мінімум одну літеру та одну цифру і бути не менше 5 символів. "
+                "Будь ласка, спробуйте ще раз."
+            )
             return
-        data["email"] = email
+        data["password"] = password
 
         keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
         keyboard.add(KeyboardButton("Підтвердити"))
