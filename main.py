@@ -18,6 +18,8 @@ BOT_TOKEN = os.environ["TG_TOKEN"]
 bot = Bot(token=BOT_TOKEN)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
+EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
+PASSWORD_REGEX = re.compile(r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$")
 
 
 class Form(StatesGroup):
@@ -44,7 +46,11 @@ async def process_name(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Form.email)
 async def process_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data["email"] = message.text
+        email = message.text.strip()
+        if not EMAIL_REGEX.match(email):
+            await message.answer("Ви ввели некоректний E-mail. Будь ласка, спробуйте ще раз.")
+            return
+        data["email"] = email
 
     await message.answer("Введіть свій пароль.")
     await Form.next()
@@ -53,7 +59,11 @@ async def process_name(message: types.Message, state: FSMContext):
 @dp.message_handler(state=Form.password)
 async def process_age(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data["password"] = message.text
+        email = message.text.strip()
+        if not EMAIL_REGEX.match(email):
+            await message.answer("Ви ввели некоректний E-mail. Будь ласка, спробуйте ще раз.")
+            return
+        data["email"] = email
 
         keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
         keyboard.add(KeyboardButton("Підтвердити"))
